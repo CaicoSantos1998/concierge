@@ -34,3 +34,4 @@ build/
 
 ### Credentials and Environment ###
 .env
+*.p12
