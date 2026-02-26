@@ -1,4 +1,4 @@
-package configuration;
+package github.caicosantos.concierge.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

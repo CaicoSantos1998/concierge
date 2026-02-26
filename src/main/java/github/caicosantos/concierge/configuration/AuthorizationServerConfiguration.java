@@ -1,4 +1,4 @@
-package configuration;
+package github.caicosantos.concierge.configuration;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
