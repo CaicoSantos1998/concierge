@@ -17,9 +17,9 @@ spring:
     oauth2:
       authorization-server:
         issuer-uri: ${ISSUER_URI}
-  app:
-    security:
-      key-store-path: ${KEYSTORE_PATH}
-      key-store-password: ${KEYSTORE_PASSWORD}
-      key-alias: ${KEY_ALIAS}
-      key-password: ${KEY_PASSWORD}
+app:
+  security:
+    key-store-path: ${KEYSTORE_PATH}
+    key-store-password: ${KEYSTORE_PASSWORD}
+    key-alias: ${KEY_ALIAS}
+    key-password: ${KEY_PASSWORD}

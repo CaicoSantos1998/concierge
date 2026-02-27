@@ -8,6 +8,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,7 +28,6 @@ import java.security.cert.Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
-import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity
@@ -42,6 +43,7 @@ public class AuthorizationServerConfiguration {
     private String keyPassword;
 
     @Bean
+    @Order(1)
     public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity hs) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(hs);
         hs.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
@@ -60,6 +62,14 @@ public class AuthorizationServerConfiguration {
     }
 
     @Bean
+    public ClientSettings clientSettings() {
+        return ClientSettings
+                .builder()
+                .requireAuthorizationConsent(false)
+                .build();
+    }
+
+    @Bean
     public JWKSource<SecurityContext> jwkSource() throws Exception {
         RSAKey rsaKey = loadRsaKey();
         JWKSet jwkSet = new JWKSet(rsaKey);
@@ -68,7 +78,6 @@ public class AuthorizationServerConfiguration {
 
     private RSAKey loadRsaKey() throws Exception {
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
-
         try(InputStream is = new ClassPathResource(keyStorePath).getInputStream()) {
             keyStore.load(is, keyStorePassword.toCharArray());
         }
