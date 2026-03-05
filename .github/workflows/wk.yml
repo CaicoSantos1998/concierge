@@ -44,5 +44,5 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEYSTORE_PATH: classpath:keystore.p12
+          KEYSTORE_PATH: keystore.p12
         run: mvn -B package --file pom.xml
