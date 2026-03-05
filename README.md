@@ -1,5 +1,6 @@
 # Concierge - Authorization Server
 [![JAVA CI with MAVEN and POSTGRES](https://github.com/CaicoSantos1998/concierge/actions/workflows/wk.yml/badge.svg)](https://github.com/CaicoSantos1998/concierge/actions/workflows/wk.yml)
+
 This project is the ecosystem's identity provider. It is responsible for authenticating users/clients and generating the JWT token for the API-Library(Resource Server), to validate requests. 
 
 ## Functionalities
