@@ -5,6 +5,7 @@ on:
     branches: ["main", "develop"]
   pull_request:
     branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -13,9 +14,9 @@ jobs:
       postgres:
         image: postgres:16.3
         env:
-          POSTGRES_DB: concierge_db
-          POSTGRES_USER: user_test
-          POSTGRES_PASSWORD: password_test
+          POSTGRES_DB: ${ {secret.DB_NAME} }
+          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
