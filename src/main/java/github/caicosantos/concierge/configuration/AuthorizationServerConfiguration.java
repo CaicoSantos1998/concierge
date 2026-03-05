@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,19 +71,34 @@ public class AuthorizationServerConfiguration {
     }
 
     @Bean
-    public JWKSource<SecurityContext> jwkSource() throws Exception {
-        RSAKey rsaKey = loadRsaKey();
-        JWKSet jwkSet = new JWKSet(rsaKey);
-        return new ImmutableJWKSet<>(jwkSet);
+    public JWKSource<SecurityContext> jwkSource() {
+        try {
+            RSAKey rsaKey = loadRsaKey();
+            JWKSet jwkSet = new JWKSet(rsaKey);
+            return new ImmutableJWKSet<>(jwkSet);
+        } catch(Exception e) {
+            throw new BeanCreationException("Failure the configurer the JWKSource!");
+        }
     }
 
     private RSAKey loadRsaKey() throws Exception {
+        String cleanedPath = keyStorePath.replace("classpath:","");
+        ClassPathResource resource = new ClassPathResource(cleanedPath);
+        if(!resource.exists()) {
+            throw new IllegalArgumentException("keystore not found");
+        }
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
         try(InputStream is = new ClassPathResource(keyStorePath).getInputStream()) {
             keyStore.load(is, keyStorePassword.toCharArray());
         }
         Key key = keyStore.getKey(keyAlias, keyPassword.toCharArray());
         Certificate certificate = keyStore.getCertificate(keyAlias);
+        if(key==null) {
+            throw new IllegalStateException("No key was found for an Alias!");
+        }
+        if(certificate==null) {
+            throw new IllegalStateException("No certificate was found for an Alias!");
+        }
         if(key instanceof RSAPrivateKey && certificate.getPublicKey() instanceof RSAPublicKey) {
             return new RSAKey
                     .Builder((RSAPublicKey) certificate.getPublicKey())
@@ -90,7 +106,7 @@ public class AuthorizationServerConfiguration {
                     .keyID(keyAlias)
                     .build();
         }
-        throw new RuntimeException("It is not possible to load the RSA key pair");
+        throw new RuntimeException("The key pair found in Alias is not of the RSA type!");
     }
 
     @Bean
