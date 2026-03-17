@@ -23,3 +23,9 @@ app:
     key-store-password: ${KEYSTORE_PASSWORD}
     key-alias: ${KEY_ALIAS}
     key-password: ${KEY_PASSWORD}
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web: DEBUG

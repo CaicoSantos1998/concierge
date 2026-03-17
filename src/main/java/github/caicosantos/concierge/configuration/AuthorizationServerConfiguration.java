@@ -85,10 +85,10 @@ public class AuthorizationServerConfiguration {
         String cleanedPath = keyStorePath.replace("classpath:","");
         ClassPathResource resource = new ClassPathResource(cleanedPath);
         if(!resource.exists()) {
-            throw new IllegalArgumentException("keystore not found");
+            throw new IllegalArgumentException("The file keystore not was found");
         }
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        try(InputStream is = new ClassPathResource(keyStorePath).getInputStream()) {
+        try(InputStream is = resource.getInputStream()) {
             keyStore.load(is, keyStorePassword.toCharArray());
         }
         Key key = keyStore.getKey(keyAlias, keyPassword.toCharArray());

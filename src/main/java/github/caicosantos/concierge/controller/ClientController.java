@@ -23,7 +23,7 @@ public class ClientController implements GeneratorHeaderLocationController {
     private final ClientMapper mapper;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('SCOPE_MANAGER')")
+    @PreAuthorize("hasRole('MANAGER') or hasAuthority('SCOPE_MANAGER')")
     public ResponseEntity<Void> save(@RequestBody @Valid ClientRegisterDTO dto) {
         Client client = mapper.toEntity(dto);
         service.save(client);

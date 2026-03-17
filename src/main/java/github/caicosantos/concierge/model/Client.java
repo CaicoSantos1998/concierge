@@ -14,7 +14,7 @@ public class Client {
     private UUID id;
     private String clientId;
     private String clientSecret;
-    @Column(name = "redirect-uri")
+    @Column(name = "redirect_uri")
     private String redirectURI;
     private String scope;
 }

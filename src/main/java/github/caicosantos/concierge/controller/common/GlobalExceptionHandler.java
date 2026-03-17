@@ -3,6 +3,7 @@ package github.caicosantos.concierge.controller.common;
 import github.caicosantos.concierge.controller.dto.ErrorResponse;
 import github.caicosantos.concierge.exceptions.DuplicateRegisterException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,6 +17,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handlerDuplicateRegisterException(DuplicateRegisterException e) {
         return ErrorResponse.conflict(e.getMessage());
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleAccessDenied(AuthorizationDeniedException e) {
+        return new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Access denied!", List.of());
     }
 
     @ExceptionHandler(RuntimeException.class)
