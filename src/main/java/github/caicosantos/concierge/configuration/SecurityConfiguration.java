@@ -1,7 +1,5 @@
 package github.caicosantos.concierge.configuration;
 
-import github.caicosantos.concierge.security.CustomUserDetailsService;
-import github.caicosantos.concierge.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -33,6 +31,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers(HttpMethod.POST, "/users/**").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/clients/**").hasRole("MANAGER");
+                    authorize.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

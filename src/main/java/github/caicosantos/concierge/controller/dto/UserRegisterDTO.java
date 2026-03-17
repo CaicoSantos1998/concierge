@@ -1,7 +1,9 @@
 package github.caicosantos.concierge.controller.dto;
 
-import java.util.List;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.List;
+@Schema(name = "User register", description = "Information needed to register the new user!")
 public record UserRegisterDTO(
         String login,
         String password,
