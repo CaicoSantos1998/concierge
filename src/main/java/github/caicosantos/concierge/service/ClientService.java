@@ -31,4 +31,11 @@ public class ClientService {
     public void deleteById(UUID id) {
         repository.deleteById(id);
     }
+
+    public Client update(Client client) {
+        if(client.getId()!=null) {
+            return repository.save(client);
+        }
+        throw new IllegalArgumentException("To update, the Client must the exist in the database.");
+    }
 }
