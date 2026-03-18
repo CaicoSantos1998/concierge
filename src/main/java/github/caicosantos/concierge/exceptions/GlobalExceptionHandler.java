@@ -1,7 +1,5 @@
-package github.caicosantos.concierge.controller.common;
+package github.caicosantos.concierge.exceptions;
 
-import github.caicosantos.concierge.controller.dto.ErrorResponse;
-import github.caicosantos.concierge.exceptions.DuplicateRegisterException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

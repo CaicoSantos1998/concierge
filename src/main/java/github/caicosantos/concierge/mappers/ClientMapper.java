@@ -1,7 +1,7 @@
-package github.caicosantos.concierge.controller.mappers;
+package github.caicosantos.concierge.mappers;
 
-import github.caicosantos.concierge.controller.dto.ClientRegisterDTO;
-import github.caicosantos.concierge.controller.dto.ClientResultSearchDTO;
+import github.caicosantos.concierge.dto.ClientRegisterDTO;
+import github.caicosantos.concierge.dto.ClientResultSearchDTO;
 import github.caicosantos.concierge.model.Client;
 import org.mapstruct.Mapper;
 

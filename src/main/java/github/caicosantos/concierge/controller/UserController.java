@@ -1,8 +1,8 @@
 package github.caicosantos.concierge.controller;
 
 import github.caicosantos.concierge.configuration.ApiStandardErrors;
-import github.caicosantos.concierge.controller.dto.UserRegisterDTO;
-import github.caicosantos.concierge.controller.mappers.UserMapper;
+import github.caicosantos.concierge.dto.UserRegisterDTO;
+import github.caicosantos.concierge.mappers.UserMapper;
 import github.caicosantos.concierge.model.User;
 import github.caicosantos.concierge.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,7 +1,7 @@
-package github.caicosantos.concierge.controller.mappers;
+package github.caicosantos.concierge.mappers;
 
-import github.caicosantos.concierge.controller.dto.UserRegisterDTO;
-import github.caicosantos.concierge.controller.dto.UserResultSearchDTO;
+import github.caicosantos.concierge.dto.UserRegisterDTO;
+import github.caicosantos.concierge.dto.UserResultSearchDTO;
 import github.caicosantos.concierge.model.User;
 import org.mapstruct.Mapper;
 

@@ -1,4 +1,4 @@
-package github.caicosantos.concierge.controller.dto;
+package github.caicosantos.concierge.dto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package github.caicosantos.concierge.controller.dto;
+package github.caicosantos.concierge.exceptions;
 
 import org.springframework.http.HttpStatus;
 
