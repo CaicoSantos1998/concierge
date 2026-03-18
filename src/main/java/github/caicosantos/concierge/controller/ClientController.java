@@ -60,6 +60,12 @@ public class ClientController implements GeneratorHeaderLocationController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER') or hasAuthority('SCOPE_MANAGER')")
+    @Operation(summary = "Delete", description = "Deleting a specific client using its unique ID!")
+    @ApiStandardErrors
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Record removed successfully!")
+    })
     public ResponseEntity<Object> deleteById(@PathVariable UUID id) {
         return service
                 .getById(id)
@@ -70,6 +76,12 @@ public class ClientController implements GeneratorHeaderLocationController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER') or hasAuthority('SCOPE_MANAGER')")
+    @Operation(summary = "Update", description = "Update a specific client using its unique ID!")
+    @ApiStandardErrors
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Record updated successfully!")
+    })
     public ResponseEntity<Void> update(
             @RequestBody @Valid ClientResultSearchDTO dto,
             @PathVariable UUID id) {
