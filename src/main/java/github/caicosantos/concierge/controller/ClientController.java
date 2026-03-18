@@ -2,6 +2,7 @@ package github.caicosantos.concierge.controller;
 
 import github.caicosantos.concierge.configuration.ApiStandardErrors;
 import github.caicosantos.concierge.dto.ClientRegisterDTO;
+import github.caicosantos.concierge.dto.ClientResultSearchDTO;
 import github.caicosantos.concierge.mappers.ClientMapper;
 import github.caicosantos.concierge.model.Client;
 import github.caicosantos.concierge.service.ClientService;
@@ -13,12 +14,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/clients")
@@ -42,5 +42,20 @@ public class ClientController implements GeneratorHeaderLocationController {
         return ResponseEntity
                 .created(location)
                 .build();
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get By ID", description = "Find a specific client using its unique ID!")
+    @ApiStandardErrors
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Request completed successfully!")
+    })
+    public ResponseEntity<ClientResultSearchDTO> getById(@PathVariable UUID id) {
+        return service
+                .getById(id)
+                .map(existID -> {
+                    ClientResultSearchDTO dto = mapper.toDTO(existID);
+                    return ResponseEntity.ok(dto);
+                }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
