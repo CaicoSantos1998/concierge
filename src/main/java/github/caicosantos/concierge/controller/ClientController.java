@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -95,5 +96,22 @@ public class ClientController implements GeneratorHeaderLocationController {
         client.setScope(dto.scope());
         service.update(client);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    @Operation(summary = "Search", description = "Perform clients searches using parameters!")
+    @ApiStandardErrors
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Request completed successfully!")
+    })
+    public ResponseEntity<List<ClientResultSearchDTO>> getAllClients(
+            @RequestParam(required = false) String clientId,
+            @RequestParam(required = false) String scope) {
+        List<Client> resultSearch = service.search(clientId, scope);
+        List<ClientResultSearchDTO> clientList = resultSearch
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(clientList);
     }
 }

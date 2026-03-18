@@ -5,7 +5,9 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestControllerAdvice
@@ -21,6 +23,19 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handleAccessDenied(AuthorizationDeniedException e) {
         return new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Access denied!", List.of());
+    }
+
+    @ExceptionHandler(SearchCombinationNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handlerSearchCombinationNotFoundException(SearchCombinationNotFoundException e) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage(), Collections.emptyList());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        String errorMessage = String.format("The parameter '%s' is not a valid UUID", e.getName());
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage, List.of());
     }
 
     @ExceptionHandler(RuntimeException.class)
