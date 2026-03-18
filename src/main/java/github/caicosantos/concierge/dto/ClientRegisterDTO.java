@@ -3,7 +3,7 @@ package github.caicosantos.concierge.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
-@Schema(name = "Client register", description = "Information needed to register the new client!")
+@Schema(name = "ClientRequest", description = "Information needed to register the new client!")
 public record ClientRegisterDTO(
         @NotBlank(message = "This field is required!")
         String clientId,

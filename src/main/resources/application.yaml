@@ -29,3 +29,6 @@ logging:
       springframework:
         security: DEBUG
         web: DEBUG
+springdoc:
+  override-with-generic-response: false
+  model-and-view-allowed: false
