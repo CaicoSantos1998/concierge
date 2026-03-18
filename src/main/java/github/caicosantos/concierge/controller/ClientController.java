@@ -17,7 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -56,6 +55,16 @@ public class ClientController implements GeneratorHeaderLocationController {
                 .map(existID -> {
                     ClientResultSearchDTO dto = mapper.toDTO(existID);
                     return ResponseEntity.ok(dto);
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteById(@PathVariable UUID id) {
+        return service
+                .getById(id)
+                .map(thisIdExist -> {
+                    service.deleteById(id);
+                    return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

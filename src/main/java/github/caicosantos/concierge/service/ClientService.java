@@ -27,4 +27,8 @@ public class ClientService {
     public Optional<Client> getByClientId(String clientId) {
         return repository.findByClientId(clientId);
     }
+
+    public void deleteById(UUID id) {
+        repository.deleteById(id);
+    }
 }
