@@ -97,10 +97,10 @@ public class UserController implements GeneratorHeaderLocationController{
     }
 
     @GetMapping
-    @Operation()
+    @Operation(summary = "Search", description = "Perform users searches using parameters!")
     @ApiStandardErrors
     @ApiResponses({
-            @ApiResponse()
+            @ApiResponse(responseCode = "200", description = "Request completed successfully!")
     })
     public ResponseEntity<List<UserResultSearchDTO>> search(
             @RequestParam(required = false) String login,
