@@ -3,6 +3,7 @@ package github.caicosantos.concierge.controller;
 import github.caicosantos.concierge.configuration.ApiStandardErrors;
 import github.caicosantos.concierge.dto.ClientRegisterDTO;
 import github.caicosantos.concierge.dto.ClientResultSearchDTO;
+import github.caicosantos.concierge.dto.ClientUpdateDTO;
 import github.caicosantos.concierge.mappers.ClientMapper;
 import github.caicosantos.concierge.model.Client;
 import github.caicosantos.concierge.service.ClientService;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -83,19 +83,17 @@ public class ClientController implements GeneratorHeaderLocationController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Record updated successfully!")
     })
-    public ResponseEntity<Void> update(
-            @RequestBody @Valid ClientResultSearchDTO dto,
+    public ResponseEntity<Object> update(
+            @RequestBody @Valid ClientUpdateDTO dto,
             @PathVariable UUID id) {
-        Optional<Client> ct = service.getById(id);
-        if (ct.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        var client = ct.get();
-        client.setClientId(dto.clientId());
-        client.setRedirectURI(dto.redirectURI());
-        client.setScope(dto.scope());
-        service.update(client);
-        return ResponseEntity.noContent().build();
+        return service
+                .getById(id)
+                .map(thisClientExist -> {
+                    thisClientExist.setRedirectURI(dto.redirectURI());
+                    thisClientExist.setScope(dto.scope());
+                    service.update(thisClientExist);
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping

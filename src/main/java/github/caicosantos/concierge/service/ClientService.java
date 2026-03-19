@@ -4,6 +4,7 @@ import github.caicosantos.concierge.exceptions.SearchCombinationNotFoundExceptio
 import github.caicosantos.concierge.model.Client;
 import github.caicosantos.concierge.repository.ClientRepository;
 import github.caicosantos.concierge.repository.specs.ClientSpecs;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,10 +38,10 @@ public class ClientService {
     }
 
     public Client update(Client client) {
-        if(client.getId()!=null) {
-            return clientRepository.save(client);
+        if(!clientRepository.existsById(client.getId())) {
+            throw new EntityNotFoundException("To update, the Client must the exist in the database.");
         }
-        throw new IllegalArgumentException("To update, the Client must the exist in the database.");
+        return clientRepository.save(client);
     }
 
     public List<Client> search(String clientId, String scope) {
