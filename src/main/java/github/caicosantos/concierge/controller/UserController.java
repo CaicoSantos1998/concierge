@@ -2,6 +2,7 @@ package github.caicosantos.concierge.controller;
 
 import github.caicosantos.concierge.configuration.ApiStandardErrors;
 import github.caicosantos.concierge.dto.UserRegisterDTO;
+import github.caicosantos.concierge.dto.UserResultSearchDTO;
 import github.caicosantos.concierge.mappers.UserMapper;
 import github.caicosantos.concierge.model.User;
 import github.caicosantos.concierge.service.UserService;
@@ -11,12 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -39,6 +38,21 @@ public class UserController implements GeneratorHeaderLocationController{
         return ResponseEntity
                 .created(location)
                 .build();
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get By ID", description = "Find a specific user using its unique ID!")
+    @ApiStandardErrors
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Request completed successfully!")
+    })
+    public ResponseEntity<UserResultSearchDTO> getById(@PathVariable UUID id) {
+        return service
+                .getById(id)
+                .map(thisIdExist -> {
+                    UserResultSearchDTO dto = mapper.toDTO(thisIdExist);
+                    return ResponseEntity.ok(dto);
+                }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }

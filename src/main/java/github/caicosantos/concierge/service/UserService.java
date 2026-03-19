@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +30,9 @@ public class UserService {
 
     public Optional<User> getByLogin(String login) {
         return repository.findByLogin(login);
+    }
+
+    public Optional<User> getById(UUID id) {
+        return repository.findById(id);
     }
 }
