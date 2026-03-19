@@ -3,6 +3,7 @@ package github.caicosantos.concierge.controller;
 import github.caicosantos.concierge.configuration.ApiStandardErrors;
 import github.caicosantos.concierge.dto.UserRegisterDTO;
 import github.caicosantos.concierge.dto.UserResultSearchDTO;
+import github.caicosantos.concierge.dto.UserUpdateDTO;
 import github.caicosantos.concierge.mappers.UserMapper;
 import github.caicosantos.concierge.model.User;
 import github.caicosantos.concierge.service.UserService;
@@ -10,12 +11,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -68,6 +71,26 @@ public class UserController implements GeneratorHeaderLocationController{
                 .getById(id)
                 .map(thisIdExist -> {
                     service.deleteById(id);
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER') or hasAuthority('SCOPE_MANAGER')")
+    @Operation(summary = "Update", description = "Update a specific user using its unique ID!")
+    @ApiStandardErrors
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Record updated successfully!")
+    })
+    public ResponseEntity<Object> update(
+            @RequestBody @Valid UserUpdateDTO dto,
+            @PathVariable UUID id) {
+        return service
+                .getById(id)
+                .map(thisUserExist -> {
+                    thisUserExist.setLogin(dto.login());
+                    thisUserExist.setRoles(dto.roles());
+                    service.update(thisUserExist);
                     return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }

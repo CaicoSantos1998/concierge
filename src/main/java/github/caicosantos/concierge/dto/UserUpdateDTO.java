@@ -5,13 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
-@Schema(name = "UserRequest", description = "Information needed to register the new user!")
-public record UserRegisterDTO(
+
+@Schema(name = "UserRequest", description = "Information needed to update the user!")
+public record UserUpdateDTO(
         @NotBlank(message = "This field is required!")
         @Size(min = 4, max = 20)
         String login,
-        @NotBlank(message = "This field is required!")
-        String password,
         @NotBlank(message = "This field is required!")
         List<String> roles
 ) {
