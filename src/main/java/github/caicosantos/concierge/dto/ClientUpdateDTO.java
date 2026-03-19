@@ -3,7 +3,7 @@ package github.caicosantos.concierge.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
-@Schema
+@Schema(name = "UserRequest", description = "Information needed to update the user!")
 public record ClientUpdateDTO(
         @NotBlank(message = "This field is required!")
         String redirectURI,
