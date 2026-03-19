@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -95,4 +96,22 @@ public class UserController implements GeneratorHeaderLocationController{
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping
+    @Operation()
+    @ApiStandardErrors
+    @ApiResponses({
+            @ApiResponse()
+    })
+    public ResponseEntity<List<UserResultSearchDTO>> search(
+            @RequestParam(required = false) String login,
+            @RequestParam(required = false) String roles
+    ) {
+        List<User> resultSearch = service.search(login, roles);
+        List<UserResultSearchDTO> userList = resultSearch
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(userList);
+
+    }
 }

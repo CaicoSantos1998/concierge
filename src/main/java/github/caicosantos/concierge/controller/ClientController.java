@@ -102,7 +102,7 @@ public class ClientController implements GeneratorHeaderLocationController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Request completed successfully!")
     })
-    public ResponseEntity<List<ClientResultSearchDTO>> getAllClients(
+    public ResponseEntity<List<ClientResultSearchDTO>> search(
             @RequestParam(required = false) String clientId,
             @RequestParam(required = false) String scope) {
         List<Client> resultSearch = service.search(clientId, scope);
