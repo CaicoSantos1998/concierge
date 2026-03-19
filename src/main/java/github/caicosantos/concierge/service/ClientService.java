@@ -5,7 +5,6 @@ import github.caicosantos.concierge.model.Client;
 import github.caicosantos.concierge.repository.ClientRepository;
 import github.caicosantos.concierge.repository.specs.ClientSpecs;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

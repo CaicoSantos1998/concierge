@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -52,6 +53,22 @@ public class UserController implements GeneratorHeaderLocationController{
                 .map(thisIdExist -> {
                     UserResultSearchDTO dto = mapper.toDTO(thisIdExist);
                     return ResponseEntity.ok(dto);
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER') or hasAuthority('SCOPE_MANAGER')")
+    @Operation(summary = "Delete", description = "Deleting a specific user using its unique ID!")
+    @ApiStandardErrors
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Record removed successfully!")
+    })
+    public ResponseEntity<Object> deleteById(@PathVariable UUID id) {
+        return service
+                .getById(id)
+                .map(thisIdExist -> {
+                    service.deleteById(id);
+                    return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
