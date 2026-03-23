@@ -1,8 +1,10 @@
 package github.caicosantos.concierge.exceptions;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,12 +46,23 @@ public class GlobalExceptionHandler {
     public ErrorResponse handlerSearchCombinationNotFoundException(SearchCombinationNotFoundException e) {
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage(), Collections.emptyList());
     }
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    private ErrorResponse handlerEntityNotFoundException(EntityNotFoundException e) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Resource not found!", List.of());
+    }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         String errorMessage = String.format("The parameter '%s' is not a valid UUID", e.getName());
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessage, List.of());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerBadCredentialsException(BadCredentialsException e) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Authentication failed, the current password is incorrect!", List.of());
     }
 
     @ExceptionHandler(RuntimeException.class)

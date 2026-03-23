@@ -1,16 +1,11 @@
 server:
   port: 8081
-
 spring:
   application:
     name: Concierge
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+  profiles:
+    active: production
   jpa:
-    show-sql: true
     properties:
       hibernate.format_sql: true
   security:
@@ -23,12 +18,40 @@ app:
     key-store-password: ${KEYSTORE_PASSWORD}
     key-alias: ${KEY_ALIAS}
     key-password: ${KEY_PASSWORD}
+springdoc:
+  override-with-generic-response: false
+  model-and-view-allowed: false
+
+---
+# Test
+spring:
+  config:
+    active:
+      on-profile: "!production"
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
 logging:
   level:
     org:
       springframework:
         security: DEBUG
         web: DEBUG
-springdoc:
-  override-with-generic-response: false
-  model-and-view-allowed: false
+
+---
+# Production
+spring:
+  config:
+    activate:
+      on-profile: production
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: false

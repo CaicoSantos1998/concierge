@@ -47,6 +47,8 @@ public class CustomRegisteredClientRepository implements RegisteredClientReposit
                 .redirectUri(client.getRedirectURI())
                 .scope(client.getScope())
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .tokenSettings(token)
                 .clientSettings(settings)

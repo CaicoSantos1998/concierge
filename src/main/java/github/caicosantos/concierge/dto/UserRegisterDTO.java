@@ -13,6 +13,8 @@ public record UserRegisterDTO(
         @NotBlank(message = "This field is required!")
         String password,
         @NotBlank(message = "This field is required!")
+        String email,
+        @NotBlank(message = "This field is required!")
         List<String> roles
 ) {
 }

@@ -34,8 +34,9 @@ public class SecurityConfiguration {
                     authorize.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     authorize.anyRequest().authenticated();
                 })
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }

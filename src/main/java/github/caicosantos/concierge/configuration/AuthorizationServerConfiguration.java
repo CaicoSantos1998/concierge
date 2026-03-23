@@ -14,12 +14,17 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.io.InputStream;
@@ -29,6 +34,8 @@ import java.security.cert.Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -81,6 +88,25 @@ public class AuthorizationServerConfiguration {
         }
     }
 
+    @Bean
+    public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
+        return  context -> {
+            if(OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
+                Authentication principal = context.getPrincipal();
+
+                Set<String> authorities = principal.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toSet());
+                context.getClaims().claim("authorities", authorities);
+            }
+        };
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+    }
+
     private RSAKey loadRsaKey() throws Exception {
         String cleanedPath = keyStorePath.replace("classpath:","");
         ClassPathResource resource = new ClassPathResource(cleanedPath);
@@ -107,10 +133,5 @@ public class AuthorizationServerConfiguration {
                     .build();
         }
         throw new RuntimeException("The key pair found in Alias is not of the RSA type!");
-    }
-
-    @Bean
-    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
     }
 }
