@@ -45,7 +45,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_PATH: keystore.p12
-          DATASOURCE_URL: ${{secrets.DATASOURCE_URL}}
-          DATASOURCE_USER: ${{secrets.DATASOURCE_USER}}
-          DATASOURCE_PASSWORD: ${{secrets.DATASOURCE_PASSWORD}}
-        run: mvn -B package --file pom.xml
+          DATASOURCE_URL: ${{ secrets.DATASOURCE_URL }}
+          DATASOURCE_USER: ${{ secrets.DATASOURCE_USER }}
+          DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
+        run: ./mvnw clean package -Dspring.profiles.active=test

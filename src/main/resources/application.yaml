@@ -25,7 +25,7 @@ springdoc:
 spring:
   config:
     activate:
-      on-profile: "!production"
+      on-profile: test
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
