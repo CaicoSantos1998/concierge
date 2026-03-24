@@ -3,8 +3,6 @@ server:
 spring:
   application:
     name: Concierge
-  profiles:
-    active: production
   jpa:
     properties:
       hibernate.format_sql: true
@@ -26,7 +24,7 @@ springdoc:
 # Test
 spring:
   config:
-    active:
+    activate:
       on-profile: "!production"
   datasource:
     url: ${DB_URL}
